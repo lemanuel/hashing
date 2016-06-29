@@ -9,6 +9,17 @@ import org.lal.hashing.http.HashingServiceConnection
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
+/**
+  * The Worker Actor responsible withe transforming the batches into
+  * there hashes. It will send the batches to a REST Microservice, and
+  * wait for the response. If it receives an error for the Microservice
+  * it will make more attempts within a given limit.
+  *
+  * @param writer the writer actor to whom must send the processed batch
+  * @param connection the connection to the microservice
+  * @param configuration the configuration for the system
+  * @param executor the executor that will transform the http request into a response.
+  */
 class Worker(writer: ActorRef,
              connection: HashingServiceConnection,
              configuration: Configuration,

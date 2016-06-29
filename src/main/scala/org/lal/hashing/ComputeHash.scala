@@ -9,6 +9,10 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.control.Exception._
 
+/**
+  * The entry point for application.
+  * Will create the ActorSystem, and then send the Start Signal.
+  */
 object ComputeHash {
   case class Arguments(in: String = "", out: String = "")
 

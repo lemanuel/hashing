@@ -3,6 +3,13 @@ package org.lal.hashing.system
 import akka.actor.{Actor, ActorLogging, ActorRef, Status}
 import org.lal.hashing.domain.HashingJob
 
+/**
+  * The Actor that is receiving a Document (a sequence of lines) and
+  * must split the work to multiple workers.
+  * The system should not have more then a certain number of workers
+  * that are running concurrent.
+  * @param workersPool The pool of workers where a new batch job should be submitted.
+  */
 class Master(workersPool: ActorRef) extends Actor with ActorLogging{
   log.debug(s"Master created")
 

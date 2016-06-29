@@ -5,6 +5,9 @@ import org.lal.hashing.domain.HashingJob
 
 import scala.collection.mutable
 
+/**
+  * The Companion Object for the Writer.
+  */
 object Writer {
   type Buffer = mutable.PriorityQueue[(Int, Batch)]
 
@@ -22,6 +25,14 @@ object Writer {
   }
 }
 
+/**
+  * The actor responsible with sending the batches computed to an OutputSink.
+  * It has the responsibility to write the date in order, based on the batch id.
+  * If it will receive later batches that are computed, it will create a buffer
+  * from where it can extract ordered batches.
+  * The Writer will notify the Master how many batches were written or not.
+  * @param sinkFunction
+  */
 class Writer(sinkFunction: OutputSink) extends Actor with ActorLogging{
   log.debug("Writer created.")
 

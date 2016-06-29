@@ -13,6 +13,16 @@ import org.lal.hashing.http.HashingServiceConnection
 
 import scala.concurrent.Future
 
+/**
+  * The Actor that will put the whole system of actors at work.
+  * It must be initialized with the path for the input file and for the output file.
+  * It will create the Master, the Writer, and the pool of Workers, and will
+  * watch for termination of the Master, so it can stop the ActorSystem, and
+  * clean resources at the end.
+  *
+  * @param in input file path
+  * @param out output file path
+  */
 class Supervisor(in: String, out: String) extends Actor with ActorLogging {
   val WriterName = "writer"
   val WorkersPoolName = "workers"
