@@ -11,19 +11,25 @@ import org.lal.hashing.domain.{HashingJob, JsonHashingJob}
 
 import scala.concurrent.Future
 
-class HashingServiceClient(implicit system: ActorSystem, materializer: Materializer) extends JsonHashingJob{
+class HashingServiceConnection(implicit system: ActorSystem, materializer: Materializer) extends JsonHashingJob{
   import system.dispatcher
+  val ServicePath = "/api/service"
+  val Schema = "http"
 
   def createRequest(hashingJob: HashingJob, configuration: Configuration): Future[HttpRequest] =
     for {
       entity <- Marshal(hashingJob).to[RequestEntity]
       authority = Authority(host = Uri.Host(configuration.RestServiceHost), port = configuration.RestServicePort)
-      uri = Uri(scheme = "http", authority=authority, path=Uri.Path("/api/service"))
+      uri = Uri(scheme = Schema, authority=authority, path=Uri.Path(ServicePath))
     } yield HttpRequest(HttpMethods.POST, uri=uri, entity=entity)
 
   def checkResponse(response: HttpResponse): Future[ResponseEntity] = response match {
-    case HttpResponse(StatusCodes.OK, _, entity, _) => Future.successful(entity)
-    case HttpResponse(statusCode, _, _, _) => Future.failed(new RuntimeException(s"Error status code:  $statusCode"))
+    case HttpResponse(StatusCodes.Accepted, _, entity, _) =>
+      Future.successful(entity)
+    case HttpResponse(StatusCodes.ServiceUnavailable, _, entity, _) =>
+      Future.failed(new RuntimeException(s"Error service unavailable. ${entity.toString}"))
+    case HttpResponse(statusCode, _, _, _) =>
+      Future.failed(new RuntimeException(s"Different status code:  $statusCode"))
   }
 
   def getResponse(hashingJob: HashingJob, configuration: Configuration, exe: HttpRequest => Future[HttpResponse]): Future[HashingJob] =
