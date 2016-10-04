@@ -7,14 +7,14 @@ To be more practical, the application is using a REST service, "Hashing-as-a-Ser
 
 Configuration
 -------------
-In the file application.conf exists some configuration that can be made.
-service/http/host -- The address for the Hashing-as-a-Service" service
-service/http/port -- The port for the Hashing-as-a-Service" service
+In the file application.conf exists some configuration that can be made.  
+service/http/host -- The address for the Hashing-as-a-Service" service  
+service/http/port -- The port for the Hashing-as-a-Service" service  
 
-app/noOfActiveJobs -- How many jobs can be started concurrently
-app/batchSize      -- The batch size, given in number of lines that will be read
-app/noOfAttempts   -- The number of attempts a worker will make for the same job, if some error exists.
-                      If the worker exceed this limit, the system will be stopped.
+app/noOfActiveJobs -- How many jobs can be started concurrently  
+app/batchSize      -- The batch size, given in number of lines that will be read  
+app/noOfAttempts   -- The number of attempts a worker will make for the same job, if some error exists.  
+                      If the worker exceed this limit, the system will be stopped.  
 
 
 How To Run
